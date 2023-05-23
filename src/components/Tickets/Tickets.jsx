@@ -6,6 +6,8 @@ class Tickets extends Component {
 
     state = {
         data: [],
+        currentPage: 1,
+        itemsPerPage: 5,
     }
 
     componentDidMount() {
@@ -22,15 +24,32 @@ class Tickets extends Component {
             });
     }
 
+    handleClickNext = () => {
+        this.setState({ currentPage: this.state.currentPage + 1 });
+    }
+
+    handleClickPrev = () => {
+        if (this.state.currentPage > 1) {
+            this.setState({ currentPage: this.state.currentPage - 1 });
+        }
+    }
+
     render() {
+        const { data, currentPage, itemsPerPage } = this.state;
+
+        // Get current items
+        const indexOfLastItem = currentPage * itemsPerPage;
+        const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+        const currentItems = data.slice(indexOfFirstItem, indexOfLastItem);
+
         return (
             <section className="Tickets">
                 <div className="Tickets-holder">
                     <div className="Tickets-cover">
                         <div className="Tickets-texts" >
-                            <p>Lastest Tickets</p>
+                            <p>Latest Tickets</p>
                             <div className="time-table">
-                                {this.state.data.map((item, index) => (
+                                {currentItems.map((item, index) => (
                                     <div className="time-table-row" key={index}>
                                         <div className="time-table-row_shadow" />
                                         <div className="time-table-self">
@@ -41,6 +60,10 @@ class Tickets extends Component {
                                         </div>
                                     </div>
                                 ))}
+                            </div>
+                            < div style={{display: 'flex', justifyContent: 'space-between'}}>
+                            <button onClick={this.handleClickPrev}>Prev</button>
+                            <button onClick={this.handleClickNext}>Next</button>
                             </div>
                         </div>
                     </div>

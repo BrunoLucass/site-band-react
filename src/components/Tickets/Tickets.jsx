@@ -17,12 +17,16 @@ class Tickets extends Component {
     fetchData = () => {
         axios.get('/getData/')
             .then(res => {
+                // Sorting data based on 'purchase time'
+                res.data.sort((a, b) => new Date(a['purchase time']) - new Date(b['purchase time']));
                 this.setState({ data: res.data });
             })
             .catch(err => {
                 console.error(err);
             });
     }
+    
+    
 
     handleClickNext = () => {
         this.setState({ currentPage: this.state.currentPage + 1 });
